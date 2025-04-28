@@ -1,0 +1,14 @@
+<slot />
+
+<style lang="scss">
+	:global(html),
+	:global(body),
+	:global(main) {
+		width: 100vw;
+		height: 100vh;
+		overflow: hidden;
+		margin: 0;
+		padding: 0;
+		position: relative;
+	}
+</style>

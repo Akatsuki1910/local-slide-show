@@ -8,4 +8,4 @@ RUN pnpm install
 COPY . .
 
 EXPOSE 3000
-CMD ["pnpm", "dlx", "tsx", "./server/index.ts"]
+CMD ["pnpm","run", "run:server"]

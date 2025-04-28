@@ -1,9 +1,11 @@
 import { defineConfig } from "vite";
-import { svelte } from "@sveltejs/vite-plugin-svelte";
-import { viteSingleFile } from "vite-plugin-singlefile";
+import { sveltekit } from '@sveltejs/kit/vite';
+// import { viteSingleFile } from "vite-plugin-singlefile";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [svelte(), viteSingleFile()],
-  base: "./",
+  plugins: [
+    sveltekit(),
+    // viteSingleFile()
+  ],
 });
