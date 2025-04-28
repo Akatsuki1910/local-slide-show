@@ -18,5 +18,9 @@
     "typescript": "~5.7.2",
     "vite": "^6.3.1",
     "vite-plugin-singlefile": "^2.2.0"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "multer": "1.4.5-lts.2"
   }
 }
