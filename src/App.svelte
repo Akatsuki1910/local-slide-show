@@ -35,7 +35,7 @@
     const interval = setInterval(() => {
       if (images.length === 0) return;
       slideIndex = (slideIndex + 1) % images.length;
-    }, 10000);
+    }, 5000);
 
     return () => {
       clearInterval(interval);
