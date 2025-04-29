@@ -49,6 +49,10 @@
 </main>
 
 <style lang="scss">
+	main {
+		overflow: hidden;
+	}
+
 	.slide-image {
 		position: absolute;
 		top: 0;
@@ -58,7 +62,7 @@
 		object-fit: contain;
 		transition-property: opacity;
 		opacity: 0;
-		transition-duration: 3s;
+		transition-duration: 1s;
 	}
 
 	.active {

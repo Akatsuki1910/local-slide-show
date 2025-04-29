@@ -5,8 +5,7 @@
 	:global(body),
 	:global(main) {
 		width: 100vw;
-		height: 100vh;
-		overflow: hidden;
+		min-height: 100vh;
 		margin: 0;
 		padding: 0;
 		position: relative;

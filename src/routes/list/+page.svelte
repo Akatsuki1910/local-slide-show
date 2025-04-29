@@ -3,6 +3,8 @@
 	import { WEB_URL, getImage } from '../../ts/utils';
 
 	let files: string[] = $state([]);
+	let isEdit = $state(false);
+	let activeImages = $state(new Set<string>());
 	let selectImages = $state(new Set<string>());
 
 	async function loadImages() {
@@ -19,8 +21,8 @@
 			body: JSON.stringify({ text: Array.from(selectImages).join(',') })
 		});
 		if (res.ok) {
-			const data = await res.json();
-			console.log(data);
+			activeImages = selectImages;
+			isEdit = false;
 		}
 	}
 
@@ -28,7 +30,13 @@
 		const res = await fetch(`${WEB_URL}/api/select-conf/`);
 		if (res.ok) {
 			const data = await res.json();
-			selectImages = new Set<string>(data.text.split(','));
+			if (!data.text) {
+				return;
+			}
+
+			activeImages = new Set<string>(data.text.split(','));
+			console.log('data', activeImages);
+			selectImages = activeImages;
 		}
 	});
 
@@ -39,12 +47,26 @@
 
 <main>
 	<h1>PICKER</h1>
-	<button type="button" onclick={handlerSelectImage}>SELECT!</button>
+	{#if isEdit}
+		<button type="button" onclick={handlerSelectImage}>SELECT</button>
+		<button
+			type="button"
+			onclick={() => {
+				isEdit = false;
+				selectImages = activeImages;
+			}}
+		>
+			CANCEL
+		</button>
+	{:else}
+		<button type="button" onclick={() => (isEdit = true)}>EDIT</button>
+	{/if}
 	<div class="files">
 		{#each files as file}
 			<button
 				class="button"
 				type="button"
+				disabled={!isEdit}
 				class:active={selectImages.has(file)}
 				onclick={() => {
 					const updated = new Set(selectImages);
@@ -54,6 +76,8 @@
 					} else {
 						updated.add(file);
 					}
+
+					console.log('updated', updated);
 
 					selectImages = updated;
 				}}
@@ -71,6 +95,11 @@
 		gap: 10px;
 	}
 
+	.description {
+		display: flex;
+		gap: 10px;
+	}
+
 	.button {
 		background: none;
 		border-width: 5px;
@@ -78,10 +107,14 @@
 		border-color: black;
 		padding: 0;
 		cursor: pointer;
-	}
 
-	.active {
-		border-color: red;
+		&:disabled {
+			cursor: default;
+		}
+
+		&.active {
+			border-color: red;
+		}
 	}
 
 	img {
