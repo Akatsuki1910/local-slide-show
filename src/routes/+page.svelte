@@ -1,33 +1,9 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { WEB_URL, getImage } from '../ts/utils';
+
 	let images: string[] = $state([]);
-	let open = $state(false);
 	let slideIndex = $state(0);
-
-	function openFn() {
-		open = true;
-	}
-	function closeFn() {
-		open = false;
-	}
-	function setImages(imgs: string[]) {
-		slideIndex = 0;
-		for (let i = 0; i < images.length; i++) {
-			document.getElementById(`image_${i}`)!.removeAttribute('data-active');
-		}
-
-		images = imgs;
-	}
-
-	const preventEsc = (ev: KeyboardEvent) => {
-		if (ev.key === 'Escape') {
-			ev.preventDefault();
-			if (open) {
-				closeFn();
-			} else {
-				openFn();
-			}
-		}
-	};
 
 	$effect(() => {
 		const interval = setInterval(() => {
@@ -39,12 +15,36 @@
 			clearInterval(interval);
 		};
 	});
+
+	onMount(() => {
+		const interval = setInterval(async () => {
+			const res = await fetch(`${WEB_URL}/api/select-conf/`);
+			if (res.ok) {
+				const data = await res.json();
+				const dataArr = data.text.split(',');
+
+				if (images.sort().join(',') !== dataArr.sort().join(',')) {
+					images = dataArr;
+					slideIndex = 0;
+				}
+			}
+		}, 10000);
+
+		return () => {
+			clearInterval(interval);
+		};
+	});
 </script>
 
-<svelte:window onkeydown={preventEsc} />
 <main>
 	{#each images as img, i}
-		<img class="slide-image" class:active={i === slideIndex} src={img} alt="" id={`image_${i}`} />
+		<img
+			class="slide-image"
+			class:active={i === slideIndex}
+			src={getImage(img)}
+			alt=""
+			id={`image_${i}`}
+		/>
 	{/each}
 </main>
 
