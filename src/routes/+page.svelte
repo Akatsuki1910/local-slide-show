@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { WEB_URL, getImage } from '../ts/utils';
+	import { API_URL, getImage } from '../ts/utils';
 
 	let images: string[] = $state([]);
 	let slideIndex = $state(0);
@@ -18,7 +18,7 @@
 
 	onMount(() => {
 		const interval = setInterval(async () => {
-			const res = await fetch(`${WEB_URL}/api/select-conf/`);
+			const res = await fetch(`${API_URL}/select-conf/`);
 			if (res.ok) {
 				const data = await res.json();
 				const dataArr = data.text.split(',');

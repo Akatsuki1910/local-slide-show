@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { WEB_URL } from '../../ts/utils';
+	import { API_URL } from '../../ts/utils';
 
 	let files: FileList | null | undefined = $state();
 	let filesArr: File[] = $state([]);
@@ -28,7 +28,7 @@
 				const formData = new FormData();
 				formData.append('file', file);
 
-				await fetch(`${WEB_URL}/api/upload/`, {
+				await fetch(`${API_URL}/upload/`, {
 					method: 'POST',
 					body: formData
 				});

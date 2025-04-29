@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { WEB_URL, getImage } from '../../ts/utils';
+	import { API_URL, getImage } from '../../ts/utils';
 
 	let files: string[] = $state([]);
 	let isEdit = $state(false);
@@ -8,12 +8,12 @@
 	let selectImages = $state(new Set<string>());
 
 	async function loadImages() {
-		const res = await fetch(`${WEB_URL}/api/files/`);
+		const res = await fetch(`${API_URL}/files/`);
 		files = (await res.json()).filter((v: string) => v !== '.gitkeep');
 	}
 
 	async function handlerSelectImage() {
-		const res = await fetch(`${WEB_URL}/api/select-conf/`, {
+		const res = await fetch(`${API_URL}/select-conf/`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -27,7 +27,7 @@
 	}
 
 	onMount(async () => {
-		const res = await fetch(`${WEB_URL}/api/select-conf/`);
+		const res = await fetch(`${API_URL}/select-conf/`);
 		if (res.ok) {
 			const data = await res.json();
 			if (!data.text) {
