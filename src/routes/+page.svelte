@@ -16,19 +16,25 @@
 		};
 	});
 
+	const getData = async () => {
+		const res = await fetch(`${API_URL()}/select-conf/`);
+		if (res.ok) {
+			const data = await res.json();
+			const dataArr = data.text.split(',');
+
+			if (images.sort().join(',') !== dataArr.sort().join(',')) {
+				images = dataArr;
+				slideIndex = 0;
+			}
+		}
+	};
+
 	onMount(() => {
 		const interval = setInterval(async () => {
-			const res = await fetch(`${API_URL}/select-conf/`);
-			if (res.ok) {
-				const data = await res.json();
-				const dataArr = data.text.split(',');
-
-				if (images.sort().join(',') !== dataArr.sort().join(',')) {
-					images = dataArr;
-					slideIndex = 0;
-				}
-			}
+			await getData();
 		}, 10000);
+
+		getData();
 
 		return () => {
 			clearInterval(interval);

@@ -28,7 +28,7 @@
 				const formData = new FormData();
 				formData.append('file', file);
 
-				await fetch(`${API_URL}/upload/`, {
+				await fetch(`${API_URL()}/upload/`, {
 					method: 'POST',
 					body: formData
 				});
