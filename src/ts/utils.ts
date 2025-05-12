@@ -4,3 +4,13 @@ export const API_URL = () => `${window.location.origin}/api`;
 export const getImage = (image: string) => {
 	return `${API_URL()}/images/${image}`;
 };
+
+export const getApiTextData = async (url: string): Promise<string | null> => {
+	const response = await fetch(`${API_URL()}/${url}`);
+	if (!response.ok) {
+		console.error('Error fetching data:', response.statusText);
+		return null;
+	}
+	const data = await response.json();
+	return data.text || null;
+};
