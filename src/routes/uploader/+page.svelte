@@ -84,11 +84,18 @@
 		border: 2px dashed #ccc;
 		border-radius: 10px;
 		background-color: #f9f9f9;
-		cursor: pointer;
 		margin: 0 auto 10px;
+		position: relative;
 
 		input {
-			display: none;
+			cursor: pointer;
+			display: block;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			opacity: 0;
 		}
 	}
 
