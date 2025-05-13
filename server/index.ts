@@ -27,14 +27,14 @@ const soccerStorage = multer.diskStorage({
 	}
 });
 
-const upload = multer({ storage });
-const soccerUpload = multer({ storage: soccerStorage });
+const fieldSize = 25 * 1024 * 1024; // 25MB
+const upload = multer({ storage, fieldSize });
+const soccerUpload = multer({ storage: soccerStorage, fieldSize });
 
 app.use('/images', express.static(uploadDir));
 app.use('/images/soccer', express.static(soccerDir));
 
 app.post('/upload', upload.single('file'), (req, res) => {
-	console.log(req.file);
 	res.send('Upload successful!');
 });
 
@@ -48,64 +48,38 @@ app.get('/files', (req, res) => {
 	});
 });
 
-app.get('/select-conf', (req, res) => {
-	const filePath = '/app/select-conf.txt';
-	if (fs.existsSync(filePath)) {
-		const data = fs.readFileSync(filePath, 'utf8');
-		res.json({ text: data });
-	} else {
-		res.status(404).send('File not found');
-	}
-});
-app.post('/select-conf', (req, res) => {
-	fs.writeFileSync('/app/select-conf.txt', req.body.text, 'utf8');
-	res.status(200).send('File saved successfully!');
-});
-
 app.post('/soccer/upload', soccerUpload.single('file'), (req, res) => {
-	console.log(req.file);
 	res.send('Upload successful!');
 });
-app.get('/soccer/conf', (req, res) => {
-	const filePath = '/app/soccer-conf.txt';
-	if (fs.existsSync(filePath)) {
-		const data = fs.readFileSync(filePath, 'utf8');
-		res.json({ text: data });
-	} else {
-		res.status(404).send('File not found');
-	}
-});
-app.post('/soccer/conf', (req, res) => {
-	fs.writeFileSync('/app/soccer-conf.txt', req.body.text, 'utf8');
-	res.status(200).send('File saved successfully!');
-});
 
-app.get('/soccer/ranking-conf', (req, res) => {
-	const filePath = '/app/soccer-ranking-conf.txt';
-	if (fs.existsSync(filePath)) {
-		const data = fs.readFileSync(filePath, 'utf8');
-		res.json({ text: data });
-	} else {
-		res.status(404).send('File not found');
-	}
-});
-app.post('/soccer/ranking-conf', (req, res) => {
-	fs.writeFileSync('/app/soccer-ranking-conf.txt', req.body.text, 'utf8');
-	res.status(200).send('File saved successfully!');
-});
+const CONFS = {
+	'select-conf': 'select-conf.txt',
+	'soccer/conf': 'soccer-conf.txt',
+	'soccer/ranking-conf': 'soccer-ranking-conf.txt',
+	'band/conf': 'band-conf.txt'
+};
 
-app.get('/band/conf', (req, res) => {
-	const filePath = '/app/band-conf.txt';
-	if (fs.existsSync(filePath)) {
-		const data = fs.readFileSync(filePath, 'utf8');
-		res.json({ text: data });
-	} else {
-		res.status(404).send('File not found');
-	}
-});
-app.post('/band/conf', (req, res) => {
-	fs.writeFileSync('/app/band-conf.txt', req.body.text, 'utf8');
-	res.status(200).send('File saved successfully!');
+Object.entries(CONFS).forEach(([route, fileName]) => {
+	app.get(`/${route}`, (req, res) => {
+		const filePath = path.join('/app', fileName);
+		if (fs.existsSync(filePath)) {
+			const data = fs.readFileSync(filePath, 'utf8');
+			res.json({ text: data });
+		} else {
+			res.status(404).send('File not found');
+		}
+	});
+
+	app.post(`/${route}`, (req, res) => {
+		const filePath = path.join('/app', fileName);
+		fs.writeFile(filePath, req.body.text, 'utf8', (err) => {
+			if (err) {
+				console.error(err);
+				return res.status(500).send('Failed to save file');
+			}
+			res.status(200).send('File saved successfully!');
+		});
+	});
 });
 
 const PORT = 3000;
