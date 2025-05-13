@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { API_URL, getApiTextData, getImage } from '../ts/utils';
+	import { getApiTextData, getImage } from '../ts/utils';
 
 	let images: string[] = $state([]);
 	let slideIndex = $state(0);
@@ -23,32 +23,16 @@
 	});
 
 	const getData = async () => {
-		const res = await fetch(`${API_URL()}/select-conf/`);
-		if (res.ok) {
-			const data = await res.json();
-			const dataArr = data.text.split(',');
+		const dataArr = await getApiTextData('/select-conf/');
 
-			if (images.sort().join(',') !== dataArr.sort().join(',')) {
-				images = dataArr;
-				slideIndex = 0;
-			}
+		if (images.sort().join(',') !== dataArr.sort().join(',')) {
+			images = dataArr;
+			slideIndex = 0;
 		}
 
-		let soccerConfTexts: string[] = [];
-		let soccerRankingTexts: string[] = [];
-
-		const res2 = await getApiTextData('/soccer/conf/');
-		if (res2) {
-			soccerConfTexts = res2.split(',');
-		}
-		const res3 = await getApiTextData('/soccer/ranking-conf/');
-		if (res3) {
-			soccerRankingTexts = res3.split(',');
-		}
-		const res4 = await getApiTextData('/band/conf/');
-		if (res4) {
-			bandTexts = res4.split(',');
-		}
+		const soccerConfTexts = await getApiTextData('/soccer/conf/');
+		const soccerRankingTexts = await getApiTextData('/soccer/ranking-conf/');
+		bandTexts = await getApiTextData('/band/conf/');
 
 		const soccerDataMem = [];
 		for (let i = 0; i < soccerConfTexts.length; i++) {

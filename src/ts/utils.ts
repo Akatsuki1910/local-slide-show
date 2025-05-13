@@ -5,12 +5,12 @@ export const getImage = (image: string) => {
 	return `${API_URL()}/images/${image}`;
 };
 
-export const getApiTextData = async (url: string): Promise<string | null> => {
+export const getApiTextData = async (url: string): Promise<string[]> => {
 	const response = await fetch(`${API_URL()}/${url}`);
 	if (!response.ok) {
 		console.error('Error fetching data:', response.statusText);
-		return null;
+		return [];
 	}
 	const data = await response.json();
-	return data.text || null;
+	return data?.text?.split(',') || [];
 };

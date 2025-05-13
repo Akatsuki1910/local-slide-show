@@ -17,9 +17,7 @@
 
 		fetch(`${API_URL()}/soccer/conf/`, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ text: names.join(',') })
 		});
 
@@ -27,9 +25,7 @@
 
 		fetch(`${API_URL()}/soccer/ranking-conf/`, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ text: rankings.join(',') })
 		});
 
@@ -76,24 +72,16 @@
 
 		fetch(`${API_URL()}/band/conf/`, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ text: formTexts.join(',') })
 		});
 	};
 
 	onMount(async () => {
-		const res = await getApiTextData('soccer/conf/');
-		if (res) {
-			confTexts = res.split(',');
-		}
+		confTexts = await getApiTextData('soccer/conf/');
 
-		const res2 = await getApiTextData('band/conf/');
-		if (res2) {
-			texts = res2.split(',');
-			count = texts.length;
-		}
+		texts = await getApiTextData('band/conf/');
+		count = texts.length;
 	});
 </script>
 
