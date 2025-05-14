@@ -56,12 +56,13 @@ const CONFS = {
 	'select-conf': 'select-conf.txt',
 	'soccer/conf': 'soccer-conf.txt',
 	'soccer/ranking-conf': 'soccer-ranking-conf.txt',
+	'soccer/ranking-support-conf': 'soccer-ranking-support-conf.txt',
 	'band/conf': 'band-conf.txt'
-};
+} as const;
 
 Object.entries(CONFS).forEach(([route, fileName]) => {
 	app.get(`/${route}`, (req, res) => {
-		const filePath = path.join('/app', fileName);
+		const filePath = path.join('/app/conf-text', fileName);
 		if (fs.existsSync(filePath)) {
 			const data = fs.readFileSync(filePath, 'utf8');
 			res.json({ text: data });
@@ -71,7 +72,7 @@ Object.entries(CONFS).forEach(([route, fileName]) => {
 	});
 
 	app.post(`/${route}`, (req, res) => {
-		const filePath = path.join('/app', fileName);
+		const filePath = path.join('/app/conf-text', fileName);
 		fs.writeFile(filePath, req.body.text, 'utf8', (err) => {
 			if (err) {
 				console.error(err);

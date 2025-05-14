@@ -4,7 +4,7 @@
 
 	export const prerender = false;
 
-	const { i, text } = $props();
+	const { i, text, checked } = $props();
 
 	let files: FileList | null | undefined = $state();
 	let file: File | null = $state(null);
@@ -36,6 +36,7 @@
 		name="ranking[]"
 		value={i + 1}
 	/>
+	<input type="radio" name="team" value={i} id={`team${i + 1}`} {checked} />
 </div>
 
 <style lang="scss">

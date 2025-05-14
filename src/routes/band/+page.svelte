@@ -7,6 +7,7 @@
 	let confTexts: string[] = $state([]);
 	let texts: string[] = $state([]);
 	let count = $state(0);
+	let checkIndex = $state(0);
 
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault();
@@ -27,6 +28,14 @@
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ text: rankings.join(',') })
+		});
+
+		const team = formData.get('team');
+
+		fetch(`${API_URL()}/soccer/ranking-support-conf/`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ text: team })
 		});
 
 		const files = formData.getAll('file[]') as File[];
@@ -82,6 +91,10 @@
 
 		texts = await getApiTextData('band/conf/');
 		count = texts.length;
+
+		const num = await getApiTextData('soccer/ranking-support-conf/');
+		console.log(num);
+		checkIndex = Number(num);
 	});
 </script>
 
@@ -89,7 +102,7 @@
 	<h1>L字帯</h1>
 	<form onsubmit={handleSubmit}>
 		{#each Array(TEAMS) as _, i}
-			<BandFiles {i} text={confTexts[i]} />
+			<BandFiles {i} text={confTexts[i]} checked={checkIndex === i} />
 		{/each}
 		<button type="submit">登録</button>
 	</form>

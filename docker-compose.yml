@@ -15,7 +15,4 @@ services:
     volumes:
       - ./uploads:/app/uploads
       - ./soccer:/app/soccer
-      - ./select-conf.txt:/app/select-conf.txt
-      - ./soccer-conf.txt:/app/soccer-conf.txt
-      - ./soccer-ranking-conf.txt:/app/soccer-ranking-conf.txt
-      - ./band-conf:/app/band-conf
+      - ./conf-text:/app/conf-text

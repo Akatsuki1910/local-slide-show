@@ -4,6 +4,7 @@
 
 	let images: string[] = $state([]);
 	let slideIndex = $state(0);
+	let supportNum = $state(0);
 
 	let soccerData: {
 		id: number;
@@ -47,6 +48,9 @@
 		) {
 			soccerData = soccerDataMem;
 		}
+
+		const d = await getApiTextData('/soccer/ranking-support-conf/');
+		supportNum = Number(d[0]);
 	};
 
 	onMount(() => {
@@ -67,8 +71,9 @@
 		<h2>順位表</h2>
 		<table>
 			<tbody>
-				{#each soccerData as d}
-					<tr>
+				{#each soccerData as d, i}
+					<tr data-support={supportNum === d.id}>
+						<td>{i + 1}</td>
 						<td><img src={getImage(`soccer/${d.id}.png`)} alt="" /></td>
 						<td>{d.name}</td>
 					</tr>
@@ -145,9 +150,13 @@
 
 		tr {
 			display: grid;
-			grid-template-columns: auto 1fr;
+			grid-template-columns: 2rem auto 1fr;
 			align-items: center;
 			gap: 2px;
+
+			&[data-support='true'] {
+				background-color: #ff0;
+			}
 
 			img {
 				width: 'auto';
