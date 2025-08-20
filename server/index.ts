@@ -27,7 +27,7 @@ const soccerStorage = multer.diskStorage({
 	}
 });
 
-const fieldSize = 25 * 1024 * 1024; // 25MB
+const fieldSize = 100 * 1024 * 1024; // 100MB
 const upload = multer({ storage, fieldSize });
 const soccerUpload = multer({ storage: soccerStorage, fieldSize });
 
