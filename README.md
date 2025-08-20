@@ -1,9 +1,9 @@
 # local-slide-show
 
 ```sh
-docker compose up -d
+pnpm run build && docker compose up -d
 ```
 
 ```sh
-docker builder prune
+docker-compose down --rmi all --volumes --remove-orphans && docker builder prune
 ```

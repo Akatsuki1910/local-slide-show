@@ -52,6 +52,16 @@ app.post('/soccer/upload', soccerUpload.single('file'), (req, res) => {
 	res.send('Upload successful!');
 });
 
+app.post('/deleteFile', (req, res) => {
+	fs.unlink(path.join(uploadDir, req.body.filename), (err) => {
+		if (err) {
+			console.error(err);
+			return res.status(500).send('Failed to delete file');
+		}
+		res.send('File deleted successfully');
+	});
+});
+
 const CONFS = {
 	'select-conf': 'select-conf.txt',
 	'soccer/conf': 'soccer-conf.txt',
